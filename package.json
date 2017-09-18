@@ -13,8 +13,11 @@
     "classnames": "^2.2.5",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
+    "firebase-admin": "^5.2.1",
+    "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "request": "^2.81.0",
     "shuffle-array": "^1.0.1"
   },
   "devDependencies": {

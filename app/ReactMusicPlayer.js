@@ -113,6 +113,21 @@ class ReactMusicPlayer extends React.Component {
         this.refs.player.volume = (mute) ? 1 : 0;
     }
 
+    updateState() {
+        let songs = [
+            {
+              "url": "https://api.soundcloud.com/tracks/251608982/stream?client_id=ec8f5272bde9a225c71692a876603706",
+              "cover": "https://i1.sndcdn.com/artworks-000150707923-1qoukg-large.jpg",
+              "artist": {
+                "song": "Tuy Hong Nhan OST Tan Thuy Hu - Luu Y Doa"
+              }
+            }
+          ];
+        this.setState({songs: songs});
+        this.refs.player.src = this.state.songs[0];
+        this.play();
+    }
+
     render() {
 
         const { active, play, progress } = this.state;
@@ -125,6 +140,7 @@ class ReactMusicPlayer extends React.Component {
 
         return (
             <div className="player-container">
+                <button onClick={this.updateState.bind(this)}>Update state</button>
                 <audio src={active.url} autoPlay={this.state.play} preload="auto" ref="player"></audio>
 
                 <div className={coverClass} style={{backgroundImage: 'url('+ active.cover +')'}}></div>

@@ -12,15 +12,15 @@ class RainyMood extends React.Component {
     componentDidMount() {
         let player = this.refs.player;
         player.volume = 0.4;
-        player.addEventListener('ended', this.end.bind(this));
-        player.addEventListener('error', this.next.bind(this));
+        player.addEventListener('ended', this.end);
+        player.addEventListener('error', this.next);
     }
 
     componentWillUnmount(){
         let player = this.refs.player;
         player.volume = 0.4;
-        player.addEventListener('ended', this.next.bind(this));
-        player.addEventListener('error', this.next.bind(this));
+        player.addEventListener('ended', this.next);
+        player.addEventListener('error', this.next);
     }
 
     next() {
