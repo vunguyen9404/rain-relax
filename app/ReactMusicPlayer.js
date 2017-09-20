@@ -1,6 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import shuffle from 'shuffle-array';
+import Song from './Song';
+import MusicMedia from './MusicMedia';
+import RainyMood from './RainyMood';
+import Search from './Search';
+import {connect} from 'react-redux';
 
 class ReactMusicPlayer extends React.Component {
     constructor(props) {
@@ -9,11 +14,13 @@ class ReactMusicPlayer extends React.Component {
             active: this.props.songs[0],
             current: 0,
             progress: 0,
+            activeIndex: 0,
             random: false,
             repeat: false,
             mute: false,
-            play: this.props.autoplay || false,
-            songs: this.props.songs
+            reset: true,
+            search: false,
+            play: this.props.autoplay || false
         }
     }
 
@@ -51,6 +58,21 @@ class ReactMusicPlayer extends React.Component {
         let progress = (currentTime * 100) / duration;
 
         this.setState({ progress: progress });
+
+        let minCurrentTime = Math.floor(currentTime / 60);
+        let secCurrentTime = Math.floor(currentTime % 60);
+        if (secCurrentTime < 10) {
+            secCurrentTime = '0' + String(secCurrentTime);
+        }
+
+        let minDurationTime = Math.floor(duration / 60);
+        let secDurationTime = Math.floor(duration % 60);
+        if (secDurationTime < 10) {
+            secDurationTime = '0' + String(secDurationTime);
+        }
+
+        this.setState({ currentTime: minCurrentTime + ':' + secCurrentTime});
+        this.setState({ durationTime: minDurationTime + ':' +secDurationTime });
     }
 
     play(){
@@ -74,30 +96,29 @@ class ReactMusicPlayer extends React.Component {
     }
 
     next(){
-        var total = this.state.songs.length;
+        var total = this.props.songs.length;
         var current = (this.state.repeat) ? this.state.current : (this.state.current < total - 1) ? this.state.current + 1 : 0;
-        var active = this.state.songs[current];
-        console.log('next');
+        var active = this.props.songs[current];
 
-        this.setState({ current: current, active: active, progress: 0 });
+        this.setState({ current: current, active: active, progress: 0, activeIndex: current });
 
         this.refs.player.src = active.url;
         this.play();
     }
 
     previous(){
-        var total = this.state.songs.length;
+        var total = this.props.songs.length;
         var current = (this.state.current > 0) ? this.state.current - 1 : total - 1;
-        var active = this.state.songs[current];
+        var active = this.props.songs[current];
 
-        this.setState({ current: current, active: active, progress: 0 });
+        this.setState({ current: current, active: active, progress: 0, activeIndex: current });
 
         this.refs.player.src = active.url;
         this.play();
     }
 
     randomize(){
-        var s = shuffle(this.state.songs.slice());
+        var s = shuffle(this.props.songs.slice());
 
         this.setState({ songs: (!this.state.random) ? s : this.state.songs, random: !this.state.random });
     }
@@ -106,84 +127,186 @@ class ReactMusicPlayer extends React.Component {
         this.setState({ repeat: !this.state.repeat });
     }
 
-    toggleMute(){
-        let mute = this.state.mute;
+    resetPlayList(){
+        this.setState({ reset: !this.state.reset });
+    }
 
-        this.setState({ mute: !this.state.mute });
+    toggleMute(){
+        let mute = this.props.mute;
+
+        let dispatch = this.props.dispatch;
+        dispatch({
+            type: 'MUTE',
+            mute: !mute
+        });
+
         this.refs.player.volume = (mute) ? 1 : 0;
     }
 
-    updateState() {
-        let songs = [
-            {
-              "url": "https://api.soundcloud.com/tracks/251608982/stream?client_id=ec8f5272bde9a225c71692a876603706",
-              "cover": "https://i1.sndcdn.com/artworks-000150707923-1qoukg-large.jpg",
-              "artist": {
-                "song": "Tuy Hong Nhan OST Tan Thuy Hu - Luu Y Doa"
-              }
-            }
-          ];
-        this.setState({songs: songs});
-        this.refs.player.src = this.state.songs[0];
+    updateState(e) {
+        let url = this.refs.url.value;
+        if (url.includes('soundcloud.com') && e.key == 'Enter' ) {
+            fetch('http://rainrelax.cf/soundcloud?url=' + url)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let dispatch = this.props.dispatch;
+                if (this.state.reset) {
+                    dispatch({
+                        type: 'ADD_LIST',
+                        songs: responseJson
+                    });
+                    var active = this.props.songs[0];
+                    this.setState({ current: 0, active: active, progress: 0, activeIndex: 0});
+                    this.refs.player.src = this.props.songs[0].url;
+                    this.refs.url.value = '';
+                    this.refs.url.placeholder = url;
+                    this.play(); 
+                } else {
+                    dispatch({
+                        type: 'ADD_SONG',
+                        song: responseJson
+                    });
+                    this.refs.url.value = '';
+                    this.refs.url.placeholder = url;
+                }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+    }
+
+    activeClick(i, props) {
+        var current = i;
+        if (this.state.current === current) {
+            this.toggle();
+        } else {
+            var active = this.props.songs[current];
+            this.setState({current: current, active: active, progress: 0, activeIndex: current});
+            this.refs.player.src = this.props.songs[current].url;
+            this.play();
+        }
+    }
+
+    focusInput() {
+        this.refs.url.focus();
+    }
+
+    search() {
+        this.setState({search: !this.state.search});
+    }
+
+    playTrack(song) {
+        this.setState({active: song, progress: 0});
+        this.refs.player.src = song.url;
         this.play();
     }
 
     render() {
-
         const { active, play, progress } = this.state;
 
         let coverClass = classnames('player-cover', {'no-height': !!!active.cover });
         let playPauseClass = classnames('fa', {'fa-pause': play}, {'fa-play': !play});
-        let volumeClass = classnames('fa', {'fa-volume-up': !this.state.mute}, {'fa-volume-off': this.state.mute});
+        let volumeClass = classnames('fa', {'fa-volume-up': !this.props.mute}, {'fa-volume-off': this.props.mute});
         let repeatClass = classnames('player-btn small repeat', {'active': this.state.repeat});
         let randomClass = classnames('player-btn small random', {'active': this.state.random });
+        let resetClass = classnames('player-btn small random', {'active': this.state.reset });
+        let controlClass = this.state.play ? 'player-container player-container--play': 'player-container'
+
+        let cover = active.cover ? active.cover.replace('-large', '-t500x500') : 'https://i.imgur.com/okHtWPU.jpg';
+
+        let searchClass = this.state.search ? 'search search--active search-fixed': 'search search-fixed';
+        let playlistClass = this.props.searched ? 'player none': 'player';
 
         return (
-            <div className="player-container">
-                <button onClick={this.updateState.bind(this)}>Update state</button>
+            <div>
+                <Search classSearch={searchClass} handleClick={this.search.bind(this)} handlePlay={this.playTrack.bind(this)} />
+                <div className={playlistClass}>
+                    <MusicMedia handleKeyPress={this.updateState.bind(this)} cover={cover} />
+                
+                    <div className="playlist">
+                        <div className="playlist__control">
+                            <div className="playlist__online">
+                                <button className="player-btn small repeat active" onClick={this.search.bind(this)} title="Search Track">
+                                    <i className="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                                <button className="player-btn small repeat active" onClick={this.focusInput.bind(this)} title="Sound Cloud">
+                                    <i className="fa fa-soundcloud" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <input type="text" placeholder="Paste link soundclound.." ref="url" onKeyPress={this.updateState.bind(this)}/>
+                            <div className="playlist__button">
+                                <button className={resetClass} onClick={this.resetPlayList.bind(this)} title="Option Reset Playlist">
+                                    <i className="fa fa-refresh" aria-hidden="true"></i>
+                                </button>
+
+                                <button className={repeatClass} onClick={this.repeat.bind(this)} title="Repeat">
+                                    <i className="fa fa-repeat" />
+                                </button>
+
+                                <button className={randomClass} onClick={this.randomize.bind(this)} title="Shuffle">
+                                    <i className="fa fa-random" />
+                                </button>
+                           </div>
+                        </div>
+                        <div className="playlist-items">
+                            {this.props.songs.map((song, i) => {
+                                let classSong = this.state.activeIndex === i ? 'song-item song-item--active': 'song-item';
+                                let classPlay = this.state.activeIndex === i && this.state.play ? 'fa fa-pause': 'fa fa-play';
+                                let classDel = this.state.activeIndex === i ? null: 'fa fa-trash';
+                                return (
+                                    <Song classDel={classDel} classSong={classSong} key={i} indexSong={i} handleClick={this.activeClick.bind(this, i, this.props)} classPlay={classPlay} name={song.artist.song}/>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                <div className={controlClass}>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-1">
+                                <img src={cover} className="artist-thumb" />
+                            </div>
+                            <div className="col-md-7">
+                                <div className="artist-info">
+                                    <h2 className="artist-time artist-time--left">{this.state.currentTime}</h2>
+                                    <h2 className="artist-time">{this.state.durationTime}</h2>
+                                </div>
+                                <div className="player-progress-container" onClick={this.setProgress.bind(this)}>
+                                    <span className="player-progress-value" style={{width: progress + '%'}}></span>
+                                </div>
+                                <h6 className="artist-name">{active.artist.song}</h6>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="player-options">
+                                    <div className="player-buttons player-controls">
+                                        <button onClick={this.previous.bind(this)} className="player-btn medium" title="Previous Song">
+                                            <i className="fa fa-backward" />
+                                        </button>
+
+                                        <button onClick={this.toggle.bind(this)} className="player-btn big" title="Play/Pause">
+                                            <i className={playPauseClass} />
+                                        </button>
+
+                                        <button onClick={this.next.bind(this)} className="player-btn medium" title="Next Song">
+                                            <i className="fa fa-forward" />
+                                        </button>
+                                    </div>
+
+                                    <div className="player-buttons">
+                                        <button className="player-btn small volume" onClick={this.toggleMute.bind(this)} title="Mute/Unmute">
+                                            <i className={volumeClass} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <audio src={active.url} autoPlay={this.state.play} preload="auto" ref="player"></audio>
-
-                <div className={coverClass} style={{backgroundImage: 'url('+ active.cover +')'}}></div>
-
-                <div className="artist-info">
-                    <h2 className="artist-name">{active.artist.name}</h2>
-                    <h3 className="artist-song-name">{active.artist.song}</h3>
-                </div>
-
-                <div className="player-progress-container" onClick={this.setProgress.bind(this)}>
-                    <span className="player-progress-value" style={{width: progress + '%'}}></span>
-                </div>
-
-                <div className="player-options">
-                    <div className="player-buttons player-controls">
-                        <button onClick={this.toggle.bind(this)} className="player-btn big" title="Play/Pause">
-                            <i className={playPauseClass} />
-                        </button>
-
-                        <button onClick={this.previous.bind(this)} className="player-btn medium" title="Previous Song">
-                            <i className="fa fa-backward" />
-                        </button>
-
-                        <button onClick={this.next.bind(this)} className="player-btn medium" title="Next Song">
-                            <i className="fa fa-forward" />
-                        </button>
-                    </div>
-
-                    <div className="player-buttons">
-                        <button className="player-btn small volume" onClick={this.toggleMute.bind(this)} title="Mute/Unmute">
-                            <i className={volumeClass} />
-                        </button>
-
-                        <button className={repeatClass} onClick={this.repeat.bind(this)} title="Repeat">
-                            <i className="fa fa-repeat" />
-                        </button>
-
-                        <button className={randomClass} onClick={this.randomize.bind(this)} title="Shuffle">
-                            <i className="fa fa-random" />
-                        </button>
-                    </div>
-
-                </div>
+                <RainyMood ref="rain" />
             </div>
         );
     }
@@ -194,4 +317,6 @@ ReactMusicPlayer.propTypes = {
     songs: PropTypes.array.isRequired
 };
 
-export default ReactMusicPlayer;
+module.exports = connect(function(state){
+    return {songs: state.songList, mute: state.mute, searched: state.searched}
+})(ReactMusicPlayer);

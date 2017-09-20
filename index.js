@@ -24,11 +24,13 @@ app.get('/soundcloud', (req, res) => {
     soundcloud(url, (err, id, body) => {
         if (err) return console.log(err);
         var body = JSON.parse(body);
-        if (body.kind) {
+        if (body.kind == "track") {
             let songs = [
                 {
                     url: body.stream_url + '?client_id=' + id,
                     cover: body.artwork_url,
+                    duration: body.duration,
+                    username: body.user.username,
                     artist: {
                         song: body.title
                     }
@@ -42,16 +44,44 @@ app.get('/soundcloud', (req, res) => {
                 let song =  {
                     url: body.stream_url + '?client_id=' + id,
                     cover: body.artwork_url,
+                    duration: body.duration,
+                    username: body.user.username,
                     artist: {
                         song: body.title
                     }
                 }
                 songs.push(song)
             });
-            
-            res.send(songs)
+
+            res.send(songs);
         }
     })
+})
+
+app.get('/soundcloud/search', (req, res) => {
+    let q = req.query.q;
+    let offset = parseInt(req.query.offset);
+    let limit = parseInt(req.query.limit);
+    soundcloud.search(q, offset,limit ,(err,id,body) => {
+        if (err) return console.log(err);
+        var body = JSON.parse(body);
+
+        let songs = new Array();
+        body.map((body, index) => {
+            let song =  {
+                url: body.stream_url + '?client_id=' + id,
+                cover: body.artwork_url,
+                duration: body.duration,
+                username: body.user.username,
+                artist: {
+                    song: body.title
+                }
+            }
+            songs.push(song)
+        });
+
+        res.send(songs);
+    });
 })
 
 app.get('/songlist', (req, res) => {
