@@ -732,3 +732,7 @@ min-height: 30% }
 .rain-setting.show {
     transform: translateX(0);
 }
+
+body {
+    background: #191919;
+}
