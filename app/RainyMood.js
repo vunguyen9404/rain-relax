@@ -15,6 +15,7 @@ class RainyMood extends React.Component {
         player.volume = this.props.muteSound ? 0 : this.props.volume;
         player.addEventListener('ended', this.next.bind(this));
         player.addEventListener('error', this.next.bind(this));
+        console.log(player.volume);
     }
 
     componentWillUnmount(){
@@ -22,6 +23,13 @@ class RainyMood extends React.Component {
         player.volume = this.props.muteSound ? 0 : this.props.volume;
         player.addEventListener('ended', this.next.bind(this));
         player.addEventListener('error', this.next.bind(this));
+        console.log(player.volume);
+    }
+
+    componentDidUpdate() {
+        let player = this.refs.player;
+        player.volume = this.props.muteSound ? 0 : this.props.volume;
+        console.log(player.volume + "did update");
     }
 
     next() {
@@ -33,6 +41,10 @@ class RainyMood extends React.Component {
         this.refs.player.src = active.url;
         this.refs.player.play();
         this.refs.player.volume = this.props.muteSound ? 0 : this.props.volume;
+    }
+
+    mute() {
+        this.refs.player.volume = 0;
     }
 
     render() {
@@ -47,5 +59,5 @@ RainyMood.propTypes = {
 };
 
 module.exports = connect(function(state){
-    return {songs: state.rainList, volume: state.volumeRain, muteSound: state.mute};
+    return {songs: state.rainList, volume: state.volumeRain, muteSound: state.muteRain};
 })(RainyMood);

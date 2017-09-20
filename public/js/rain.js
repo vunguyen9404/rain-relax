@@ -18,6 +18,7 @@ var lightTimeTotal = 0;
 
 var w = canvas1.width = canvas2.width = canvas3.width = window.innerWidth;
 var h = canvas1.height = canvas2.height = canvas3.height = window.innerHeight;
+
 window.addEventListener('resize', function() {
   w = canvas1.width = canvas2.width = canvas3.width = window.innerWidth;
   h = canvas1.height = canvas2.height = canvas3.height = window.innerHeight;

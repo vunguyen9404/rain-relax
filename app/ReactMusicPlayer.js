@@ -20,6 +20,7 @@ class ReactMusicPlayer extends React.Component {
             mute: false,
             reset: true,
             search: false,
+            volume: this.props.volume || 1,
             play: this.props.autoplay || false
         }
     }
@@ -50,6 +51,21 @@ class ReactMusicPlayer extends React.Component {
         this.refs.player.currentTime = currentTime;
         this.setState({ progress: progress });
         this.play();
+    }
+
+    setProgressVolume(e){
+        let target = e.target.nodeName === 'SPAN' ? e.target.parentNode : e.target;
+        let width = target.clientWidth;
+        let rect = target.getBoundingClientRect();
+        let offsetX = e.clientX - rect.left;
+        let volumeMax = 1;
+        let volumeCurrent = (volumeMax * offsetX) / width;
+        let volume = volumeCurrent;
+
+        let dispatch = this.props.dispatch;
+        dispatch({type: 'SET_VOLUME_MUSIC', volume})
+        this.setState({volume: volume});
+        this.refs.player.volume = volume;
     }
 
     updateProgress(){
@@ -136,7 +152,7 @@ class ReactMusicPlayer extends React.Component {
 
         let dispatch = this.props.dispatch;
         dispatch({
-            type: 'MUTE',
+            type: 'MUTE_MUSIC',
             mute: !mute
         });
 
@@ -202,9 +218,13 @@ class ReactMusicPlayer extends React.Component {
         this.play();
     }
 
+    toggleMuteRain() {
+        this.refs.rain.mute();
+    }
+
     render() {
         const { active, play, progress } = this.state;
-
+        let volume = this.state.volume * 100;
         let coverClass = classnames('player-cover', {'no-height': !!!active.cover });
         let playPauseClass = classnames('fa', {'fa-pause': play}, {'fa-play': !play});
         let volumeClass = classnames('fa', {'fa-volume-up': !this.props.mute}, {'fa-volume-off': this.props.mute});
@@ -299,6 +319,9 @@ class ReactMusicPlayer extends React.Component {
                                             <i className={volumeClass} />
                                         </button>
                                     </div>
+                                    <div className="volume-progress-container" onClick={this.setProgressVolume.bind(this)}>
+                                        <span className="volume-progress-value" style={{width: volume + '%'}}></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -318,5 +341,5 @@ ReactMusicPlayer.propTypes = {
 };
 
 module.exports = connect(function(state){
-    return {songs: state.songList, mute: state.mute, searched: state.searched}
+    return {songs: state.songList, mute: state.mute, volume: state.volumeMusic, searched: state.searched}
 })(ReactMusicPlayer);

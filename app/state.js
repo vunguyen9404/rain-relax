@@ -74,7 +74,10 @@ var stateDefault = {
         }
     ],
     volumeRain: 1,
-    mute: false,
-    searched: false
+    volumeMusic: 1,
+    muteMusic: false,
+    muteRain: false,
+    searched: false,
+    rain: true
 }
 module.exports = stateDefault;
