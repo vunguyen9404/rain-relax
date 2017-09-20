@@ -15784,7 +15784,7 @@ var Track = function (_React$Component) {
                                 _react2.default.createElement(
                                     'a',
                                     { href: '#list', className: 'track-card__btn', onClick: this.addList.bind(this) },
-                                    _react2.default.createElement('i', { className: 'fa fa-list-ul', 'aria-hidden': 'true' })
+                                    _react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
                                 )
                             )
                         )

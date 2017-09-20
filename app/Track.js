@@ -44,7 +44,7 @@ class Track extends React.Component {
                                 <span>{duration}</span>
                             </div>
                             <div className="track-card__addlist">
-                                <a href="#list" className="track-card__btn" onClick={this.addList.bind(this)}><i className="fa fa-list-ul" aria-hidden="true"></i></a>
+                                <a href="#list" className="track-card__btn" onClick={this.addList.bind(this)}><i className="fa fa-plus" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>
