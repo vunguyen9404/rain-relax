@@ -15342,7 +15342,8 @@ var MusicMedia = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (MusicMedia.__proto__ || Object.getPrototypeOf(MusicMedia)).call(this, props));
 
         _this.state = {
-            volume: _this.props.volume || 1
+            volume: _this.props.volume || 1,
+            setting: false
         };
         return _this;
     }
@@ -15364,8 +15365,6 @@ var MusicMedia = function (_React$Component) {
                 type: 'MUTE_RAIN',
                 mute: !mute
             });
-
-            this.refs.player.volume = mute ? 1 : 0;
         }
     }, {
         key: 'toggleRain',
@@ -15374,6 +15373,13 @@ var MusicMedia = function (_React$Component) {
             dispatch({
                 type: 'TOGGLE_RAIN'
             });
+        }
+    }, {
+        key: 'toggleSetting',
+        value: function toggleSetting(e) {
+            if (e.target.nodeName != 'PROGRESSBAR' && e.target.nodeName != 'SPAN') {
+                this.setState({ setting: !this.state.setting });
+            }
         }
     }, {
         key: 'setProgressVolume',
@@ -15389,7 +15395,6 @@ var MusicMedia = function (_React$Component) {
             var dispatch = this.props.dispatch;
             dispatch({ type: 'SET_VOLUME_RAIN', volume: volume });
             this.setState({ volume: volume });
-            this.refs.player.volume = volume;
         }
     }, {
         key: 'render',
@@ -15397,27 +15402,33 @@ var MusicMedia = function (_React$Component) {
             var volumeClass = this.props.mute ? 'fa fa-volume-off' : 'fa fa-volume-up';
             var cloudClass = this.props.rain ? 'player-btn cloud act-cloud' : 'player-btn cloud';
             var volume = this.state.volume * 100;
+            var setingClass = this.state.setting ? 'rain-setting show' : 'rain-setting';
+            var backgroundClass = this.state.setting ? 'background blur' : 'background';
             return _react2.default.createElement(
                 'div',
                 { className: 'player__media' },
-                _react2.default.createElement('div', { className: 'background', style: { backgroundImage: 'url(' + this.props.cover + ')' } }),
+                _react2.default.createElement('div', { className: backgroundClass, style: { backgroundImage: 'url(' + this.props.cover + ')' } }),
                 _react2.default.createElement(
                     'div',
                     { className: 'media-controls' },
+                    _react2.default.createElement(
+                        'a',
+                        { href: '#', className: 'toogle-menu', title: 'Rainy Mood Setting', onClick: this.toggleSetting.bind(this) },
+                        _react2.default.createElement('i', { className: 'fa-list-ul fa', 'aria-hidden': 'true' })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: setingClass, onClick: this.toggleSetting.bind(this) },
                     _react2.default.createElement(
                         'button',
                         { className: 'player-btn small volume', onClick: this.toggleMute.bind(this), title: 'Mute/Unmute' },
                         _react2.default.createElement('i', { className: volumeClass })
                     ),
                     _react2.default.createElement(
-                        'div',
+                        'progressbar',
                         { className: 'volume-progress-container', onClick: this.setProgressVolume.bind(this) },
                         _react2.default.createElement('span', { className: 'volume-progress-value', style: { width: volume + '%' } })
-                    ),
-                    _react2.default.createElement(
-                        'a',
-                        { href: '#', className: 'toogle-menu', title: 'Rainy Mood Setting' },
-                        _react2.default.createElement('i', { className: 'fa fa-cloud', 'aria-hidden': 'true' })
                     )
                 )
             );
