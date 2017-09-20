@@ -40,11 +40,11 @@ class Track extends React.Component {
                         <h2 className="track-card__title">{this.props.song.artist.song}</h2>
                         <div className="track-card__action">
                             <div className="track-card__reaction">
-                                <a href="#play" className="track-card__btn" onClick={this.playTrack.bind(this)}><i className="fa fa-play" aria-hidden="true"></i></a>
+                                <a href="#play" className="track-card__btn" onClick={this.playTrack.bind(this)} title="Play Now"><i className="fa fa-play" aria-hidden="true"></i></a>
                                 <span>{duration}</span>
                             </div>
                             <div className="track-card__addlist">
-                                <a href="#list" className="track-card__btn" onClick={this.addList.bind(this)}><i className="fa fa-plus" aria-hidden="true"></i></a>
+                                <a href="#list" className="track-card__btn" onClick={this.addList.bind(this)} title="Add To Playlist"><i className="fa fa-plus" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>

@@ -15769,7 +15769,7 @@ var Track = function (_React$Component) {
                                 { className: 'track-card__reaction' },
                                 _react2.default.createElement(
                                     'a',
-                                    { href: '#play', className: 'track-card__btn', onClick: this.playTrack.bind(this) },
+                                    { href: '#play', className: 'track-card__btn', onClick: this.playTrack.bind(this), title: 'Play Now' },
                                     _react2.default.createElement('i', { className: 'fa fa-play', 'aria-hidden': 'true' })
                                 ),
                                 _react2.default.createElement(
@@ -15783,7 +15783,7 @@ var Track = function (_React$Component) {
                                 { className: 'track-card__addlist' },
                                 _react2.default.createElement(
                                     'a',
-                                    { href: '#list', className: 'track-card__btn', onClick: this.addList.bind(this) },
+                                    { href: '#list', className: 'track-card__btn', onClick: this.addList.bind(this), title: 'Add To Playlist' },
                                     _react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
                                 )
                             )
