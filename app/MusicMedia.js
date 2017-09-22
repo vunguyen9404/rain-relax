@@ -67,7 +67,7 @@ class MusicMedia extends React.Component {
 
                 <div className={setingClass} onClick={this.toggleSetting.bind(this)}>
                     <button className="player-btn small volume" onClick={this.toggleMute.bind(this)} title="Mute/Unmute">
-                        <i className={volumeClass} />
+                        <i className={volumeClass}></i>
                     </button>
 
                     <progressbar className="volume-progress-container" onClick={this.setProgressVolume.bind(this)}>
