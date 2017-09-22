@@ -15421,11 +15421,6 @@ var MusicMedia = function (_React$Component) {
                     'div',
                     { className: setingClass, onClick: this.toggleSetting.bind(this) },
                     _react2.default.createElement(
-                        'span',
-                        null,
-                        'Rain volume: '
-                    ),
-                    _react2.default.createElement(
                         'button',
                         { className: 'player-btn small volume', onClick: this.toggleMute.bind(this), title: 'Mute/Unmute' },
                         _react2.default.createElement('i', { className: volumeClass })
