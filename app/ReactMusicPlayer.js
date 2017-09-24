@@ -18,7 +18,7 @@ class ReactMusicPlayer extends React.Component {
             random: false,
             repeat: false,
             mute: false,
-            reset: true,
+            reset: false,
             search: false,
             volume: this.props.volume || 1,
             play: this.props.autoplay || false

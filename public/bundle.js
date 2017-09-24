@@ -11369,7 +11369,7 @@ var ReactMusicPlayer = function (_React$Component) {
             random: false,
             repeat: false,
             mute: false,
-            reset: true,
+            reset: false,
             search: false,
             volume: _this.props.volume || 1,
             play: _this.props.autoplay || false
