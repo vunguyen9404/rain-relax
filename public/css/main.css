@@ -399,6 +399,36 @@ background: rgba(0, 0, 0, 0.1); }
     outline: 1px solid slategrey;
 }
 
+.playlist::-moz-scrollbar {
+    width: 2px;
+}
+    
+.playlist-items::-moz-scrollbar-track {
+    -webkit-box-shaozw: inset 0 0 6px rgba(0,0,0,0.3);
+}
+    
+.playlist::-moz-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+.playlist::-o-scrollbar {
+    width: 2px;
+}
+    
+.playlist-items::-o-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+    
+.playlist::-o-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+.playlist::scrollbar {
+    width: 2px;
+}
+
 .player__media {
 position: relative;
 min-height: 30% }
