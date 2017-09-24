@@ -11299,12 +11299,6 @@ ReactDOM.render(React.createElement(
     React.createElement(RainRelax, null)
 ), document.getElementById('root'));
 
-ReactDOM.render(React.createElement(
-    Provider,
-    { store: store },
-    React.createElement(Rain, null)
-), document.getElementById('rain-wrap'));
-
 /***/ }),
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {

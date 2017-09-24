@@ -18,7 +18,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-ReactDOM.render(<Provider store={store} >
-    <Rain/>
-</Provider>, document.getElementById('rain-wrap'));
