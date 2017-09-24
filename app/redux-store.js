@@ -1,9 +1,9 @@
 var redux = require('redux');
 var stateDefault = require('./state');
 
-let pl = JSON.parse(localStorage.getItem('playlist'));
-if (pl.length > 1) {
-    stateDefault.songList = pl;
+let pl = localStorage.getItem('playlist');
+if (pl) {
+    stateDefault.songList = JSON.parse(pl);
 }
 
 var reducer = (state = stateDefault, action) => {

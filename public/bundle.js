@@ -26017,9 +26017,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var redux = __webpack_require__(64);
 var stateDefault = __webpack_require__(236);
 
-var pl = JSON.parse(localStorage.getItem('playlist'));
-if (pl.length > 1) {
-    stateDefault.songList = pl;
+var pl = localStorage.getItem('playlist');
+if (pl) {
+    stateDefault.songList = JSON.parse(pl);
 }
 
 var reducer = function reducer() {
