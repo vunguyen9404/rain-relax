@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 import ReactMusicPlayer from './ReactMusicPlayer';
 var Provider = require('react-redux').Provider;
 var store = require('./redux-store.js');
+var Rain = require('./Rain');
 
 class RainRelax extends React.Component {
     render() {
@@ -18,3 +19,7 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
+
+ReactDOM.render(<Provider store={store} >
+    <Rain/>
+</Provider>, document.getElementById('rain-wrap'));

@@ -11273,6 +11273,7 @@ var ReactDOM = __webpack_require__(149);
 
 var Provider = __webpack_require__(14).Provider;
 var store = __webpack_require__(235);
+var Rain = __webpack_require__(239);
 
 var RainRelax = function (_React$Component) {
     _inherits(RainRelax, _React$Component);
@@ -11298,6 +11299,12 @@ ReactDOM.render(React.createElement(
     { store: store },
     React.createElement(RainRelax, null)
 ), document.getElementById('root'));
+
+ReactDOM.render(React.createElement(
+    Provider,
+    { store: store },
+    React.createElement(Rain, null)
+), document.getElementById('rain-wrap'));
 
 /***/ }),
 /* 98 */
@@ -26237,6 +26244,57 @@ var ButtonPaniPrev = function (_React$Component) {
 }(_react2.default.Component);
 
 module.exports = ButtonPaniPrev;
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(14);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Rain = function (_React$Component) {
+    _inherits(Rain, _React$Component);
+
+    function Rain() {
+        _classCallCheck(this, Rain);
+
+        return _possibleConstructorReturn(this, (Rain.__proto__ || Object.getPrototypeOf(Rain)).apply(this, arguments));
+    }
+
+    _createClass(Rain, [{
+        key: 'render',
+        value: function render() {
+            var idRain = this.props.rain ? 'rain' : null;
+            return _react2.default.createElement(
+                'div',
+                { className: 'thunder' },
+                _react2.default.createElement('canvas', { id: idRain })
+            );
+        }
+    }]);
+
+    return Rain;
+}(_react2.default.Component);
+
+module.exports = (0, _reactRedux.connect)(function (state) {
+    return { rain: state.rain };
+})(Rain);
 
 /***/ })
 /******/ ]);

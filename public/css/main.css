@@ -763,21 +763,3 @@ body {
     z-index: 99;
     text-align: center;
 }
- 
-.eq {
-    margin: 32px;
-    position: relative;
-    z-index: 100;
-}
-
-div.controls label {
-    display: inline-block;
-    text-align: right;
-    width: 80px;
-}
-
-div.controls label, div.controls input {
-    vertical-align: middle;
-    padding: 0;
-    margin: 0;
-}
