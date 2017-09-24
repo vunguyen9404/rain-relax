@@ -3,7 +3,6 @@ var ReactDOM = require('react-dom');
 import ReactMusicPlayer from './ReactMusicPlayer';
 var Provider = require('react-redux').Provider;
 var store = require('./redux-store.js');
-import Rain from './RainReact'
 
 class RainRelax extends React.Component {
     render() {

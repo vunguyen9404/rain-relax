@@ -736,3 +736,48 @@ min-height: 30% }
 body {
     background: #191919;
 }
+
+.btn-next, .btn-prev {
+    color: #bdbebf;
+    display: inline-block;
+    padding: 8px 20px;
+    border: 2px solid #bdbebf;
+    border-radius: 10px;
+    margin: 20px;
+    transition: all 0.5s;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.btn-next:hover, .btn-prev:hover {
+    color: black;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid white;
+    border-radius: 10px;
+    margin: 20px;
+    text-decoration: none;
+}
+
+.pani {
+    position: relative;
+    z-index: 99;
+    text-align: center;
+}
+ 
+.eq {
+    margin: 32px;
+    position: relative;
+    z-index: 100;
+}
+
+div.controls label {
+    display: inline-block;
+    text-align: right;
+    width: 80px;
+}
+
+div.controls label, div.controls input {
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+}

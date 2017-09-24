@@ -1,5 +1,11 @@
 var redux = require('redux');
 var stateDefault = require('./state');
+
+let pl = JSON.parse(localStorage.getItem('playlist'));
+if (pl.length > 1) {
+    stateDefault.songList = pl;
+}
+
 var reducer = (state = stateDefault, action) => {
     switch (action.type) {
         case 'ADD_SONG':
@@ -30,5 +36,5 @@ var reducer = (state = stateDefault, action) => {
 }
 
 var store = redux.createStore(reducer);
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => localStorage.setItem('playlist', JSON.stringify(store.getState().songList)));
 module.exports = store;

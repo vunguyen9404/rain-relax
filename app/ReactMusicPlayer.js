@@ -162,7 +162,7 @@ class ReactMusicPlayer extends React.Component {
     updateState(e) {
         let url = this.refs.url.value;
         if (url.includes('soundcloud.com') && e.key == 'Enter' ) {
-            fetch('http://rainrelax.cf/soundcloud?url=' + url)
+            fetch('https://rainrelax.cf/soundcloud?url=' + url)
             .then((response) => response.json())
             .then((responseJson) => {
                 let dispatch = this.props.dispatch;
@@ -176,7 +176,7 @@ class ReactMusicPlayer extends React.Component {
                     this.refs.player.src = this.props.songs[0].url;
                     this.refs.url.value = '';
                     this.refs.url.placeholder = url;
-                    this.play(); 
+                    this.play();
                 } else {
                     dispatch({
                         type: 'ADD_SONG',
@@ -243,7 +243,7 @@ class ReactMusicPlayer extends React.Component {
                 <Search classSearch={searchClass} handleClick={this.search.bind(this)} handlePlay={this.playTrack.bind(this)} />
                 <div className={playlistClass}>
                     <MusicMedia handleKeyPress={this.updateState.bind(this)} cover={cover} />
-                
+
                     <div className="playlist">
                         <div className="playlist__control">
                             <div className="playlist__online">
@@ -341,5 +341,5 @@ ReactMusicPlayer.propTypes = {
 };
 
 module.exports = connect(function(state){
-    return {songs: state.songList, mute: state.mute, volume: state.volumeMusic, searched: state.searched}
+    return {songs: state.songList, mute: state.muteMusic, volume: state.volumeMusic, searched: state.searched}
 })(ReactMusicPlayer);

@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import Track from './Track';
+import ButtonPaniNext from './ButtonPaniNext';
+import ButtonPaniPrev from './ButtonPaniPrev';
 
 class Search extends React.Component {
     constructor(props) {
@@ -29,12 +31,12 @@ class Search extends React.Component {
     search(e) {
         let q = this.refs.search.value;
         if (e.key == 'Enter' ) {
-            fetch('http://rainrelax.cf/soundcloud/search?offset=0&limit=16&q='+q)
+            fetch('https://rainrelax.cf/soundcloud/search?offset=0&limit=16&q='+q)
             .then((response) => response.json())
             .then((responseJson) => {
                 let dispatch = this.props.dispatch;
                 dispatch({type: 'SEARCH', searched: true});
-                
+
                 this.refs.search.value = '';
                 this.refs.search.placeholder = q;
 
@@ -49,7 +51,22 @@ class Search extends React.Component {
     getMore() {
         let q = this.refs.search.placeholder;
         let offset = this.state.offset + 1;
-        fetch('http://rainrelax.cf/soundcloud/search?offset='+ offset +'&limit=1&q='+q)
+        fetch('https://rainrelax.cf/soundcloud/search?offset='+ offset +'&limit=1&q='+q)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            let dispatch = this.props.dispatch;
+            dispatch({type: 'SEARCH', searched: true});
+            this.setState({tracks: [...this.state.tracks, ...responseJson], isSearch: true, offset: offset});
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    nextPage() {
+        let q = this.refs.search.placeholder;
+        let offset = this.state.offset + 16;
+        fetch('https://rainrelax.cf/soundcloud/search?offset='+ offset +'&limit=12&q='+q)
         .then((response) => response.json())
         .then((responseJson) => {
             let dispatch = this.props.dispatch;
@@ -64,6 +81,8 @@ class Search extends React.Component {
     render() {
         var handlePlay = this.props.handlePlay;
         var classSearch = this.state.isSearch ? "search" : this.props.classSearch;
+        var classPani = this.state.isSearch ? "pani" : "pani none";
+
         return (
             <div className={classSearch}>
                 <div className="container">
@@ -79,10 +98,14 @@ class Search extends React.Component {
                             );
                         })}
                     </div>
+
+                    <div className={classPani}>
+                        <ButtonPaniNext handleClick={this.nextPage.bind(this)} classPani="btn-next"/>
+                    </div>
                 </div>
             </div>
         );
-        
+
     }
 }
 

@@ -28,5 +28,4 @@ class Song extends React.Component {
         );
     }
 }
-
 module.exports = connect()(Song);

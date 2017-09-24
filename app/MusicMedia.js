@@ -61,6 +61,8 @@ class MusicMedia extends React.Component {
         return (
             <div className="player__media">
                 <div className={backgroundClass} style={{backgroundImage: 'url('+ this.props.cover +')'}}></div>
+
+
                 <div className="media-controls">
                     <a href="#" className="toogle-menu" title="Rainy Mood Setting" onClick={this.toggleSetting.bind(this)}><i className="fa-list-ul fa" aria-hidden="true"></i></a>
                 </div>
